@@ -191,23 +191,15 @@ def main():
 	canvas.configure(yscrollcommand=form_scroll.set)
 	fields_frame = ttk.Frame(canvas)
 	canvas_window = canvas.create_window((0, 0), window=fields_frame, anchor="nw")
-	fields_frame.bind(
-		"<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all"))
-	)
-	canvas.bind(
-		"<Configure>", lambda event: canvas.itemconfigure(canvas_window, width=event.width)
-	)
+	fields_frame.bind("<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all")))
+	canvas.bind("<Configure>", lambda event: canvas.itemconfigure(canvas_window, width=event.width))
 
 	# Create form labels and entry fields from the workbook's header row.
 	field_values = []
 	for row_number, header in enumerate(headers):
-		ttk.Label(fields_frame, text=str(header)).grid(
-			row=row_number, column=0, sticky="w", pady=3, padx=(0, 8)
-		)
+		ttk.Label(fields_frame, text=str(header)).grid(row=row_number, column=0, sticky="w", pady=3, padx=(0, 8))
 		value = tk.StringVar()
-		ttk.Entry(fields_frame, textvariable=value).grid(
-			row=row_number, column=1, sticky="ew", pady=3
-		)
+		ttk.Entry(fields_frame, textvariable=value).grid(row=row_number, column=1, sticky="ew", pady=3)
 		field_values.append(value)
 	fields_frame.columnconfigure(1, weight=1)
 
@@ -239,6 +231,7 @@ def main():
 		selection = tree.selection()
 		if not selection:
 			return
+		
 		row_id = int(selection[0])
 		row = view_model.select_character(row_id)
 		if row is not None:
@@ -265,9 +258,7 @@ def main():
 	button_frame = ttk.Frame(form)
 	button_frame.grid(row=2, column=0, columnspan=2, sticky="ew", pady=(10, 0))
 	ttk.Button(button_frame, text="Add", command=add_row).pack(side="left", padx=(0, 5))
-	ttk.Button(button_frame, text="Update selected", command=update_row).pack(
-		side="left", padx=5
-	)
+	ttk.Button(button_frame, text="Update selected", command=update_row).pack(side="left", padx=5)
 	ttk.Button(button_frame, text="Clear", command=clear_fields).pack(side="left", padx=5)
 	tree.bind("<<TreeviewSelect>>", select_row)
 	refresh_rows()
